@@ -1,0 +1,18 @@
+<?php namespace App\Http\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class BaseCasDetalle extends Model {
+    protected $primaryKey = 'id';
+    public $incrementing = true;
+    protected $table = 'base_cas_detalle';  
+    
+    protected $fillable = [
+        "nombres" ,
+        "detalle",
+        "cargo",
+        "tipo_ingreso",
+        "fe_ingreso",
+        "fin_licencia"
+    ];
+}
