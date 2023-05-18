@@ -20,6 +20,23 @@ Route::get('/welcome', function () {
 });
 
 Route::post('/presupuestal/certificacion/importar','CertificacionPresuController@import'); 
+Route::post('/cas/nueva_publicacion','CasController@nueva_publicacion'); 
+
+//DOCUMENTOS
+Route::get('/documentos','DocumentosController@list'); 
+Route::post('/documentos','DocumentosController@create'); 
+Route::put('/documentos/{id}','DocumentosController@update'); 
+Route::delete('/documentos/{id}','DocumentosController@delete'); 
+Route::post('/documentos/import','DocumentosController@import'); 
+
+//JUDICIALES
+Route::get('/judiciales','JudicialesController@list'); 
+Route::post('/judiciales','JudicialesController@create'); 
+Route::put('/judiciales/{id}','JudicialesController@update'); 
+Route::delete('/judiciales/{id}','JudicialesController@delete'); 
+
+Route::post('/judiciales_detail','JudicialesController@create_detail');
+
 
 Route::group(['middleware' => 'jwt.verify'], function() {
     Route::post('/cas/planilla/importar','PlanillaCasController@import'); 
@@ -35,14 +52,16 @@ Route::group(['middleware' => 'jwt.verify'], function() {
    //TODO
    Route::delete('/todo/{id}','TodoController@delete'); 
     Route::get('/todo','TodoController@index'); 
+    Route::get('/todo_anio/{anio}','TodoController@index_anio'); 
     Route::post('/todo','TodoController@save'); 
 
-    //CONFIRGURACION
+    //CONFIGURACION
     Route::get('/configuracion/laudos','ConfiguracionController@laudos'); 
     Route::get('/configuracion/convocatorias','ConfiguracionController@convocatorias'); 
     Route::get('/configuracion/certificados','ConfiguracionController@certificados'); 
     Route::get('/configuracion/mop','ConfiguracionController@mop'); 
-    Route::get('/configuracion/areas','ConfiguracionController@areas');  
+    Route::get('/configuracion/modalidades/{anio}','ConfiguracionController@modalidades');  
+    Route::get('/configuracion/get_areas','ConfiguracionController@areas');
 
     Route::get('/presupuestal/dependencias','PresupuestoController@dependencias'); 
 
@@ -63,6 +82,7 @@ Route::group(['middleware' => 'jwt.verify'], function() {
     Route::get('/formativa/planilla/planilla_formativa','PlanillaFormativaController@planilla_formativa'); 
     Route::post('/formativa/personal/personal_formativa_import','PersonalFormativaController@import'); 
     Route::post('/formativa/airhsp/importar','AirHspFormativaController@import'); 
+    Route::get('/formativa/certificado/{anio}','CertificadoController@certificadoPracticante'); 
 
     Route::get('/activos/pap/{anio}','PapController@index'); 
     Route::get('/activos/pap_air','PapController@pap_air'); 
@@ -98,40 +118,45 @@ Route::group(['middleware' => 'jwt.verify'], function() {
 
     Route::get('/cap/certificado/{anio}','CertificadoController@certificadoCap'); 
     Route::get('/cap/presupuesto/{anio}','PresupuestoController@presupuestoCap'); 
+    Route::get('/cap/presupuesto_2023','PresupuestoController@presupuestoCap2023'); 
     Route::get('/reporte/rpt_cantidad_modalidad','ReporteController@rpt_cantidad_modalidad'); 
 
 
 
     Route::get('/tramite/certificacion','CasController@certificacion'); 
-
     Route::put('/tramite/certificacion','CertificacionController@certificacion_update');
+    Route::put('/cas/certificacion_update_solicitud','CertificacionController@update_solicitud'); 
+
+    
     Route::post('/tramite/certificacion','CasController@certificacion_create');
     Route::get('/tramite/certificacion_plazas','CertificacionController@certificacion_plazas');
     Route::post('/tramite/certificacion_plaza_update','CertificacionController@certificacion_plaza_update');
+    Route::post('/cas/certificacion_validar','CertificacionController@validar'); 
 
 
     Route::post('cas/create_certificacion_detalle_publicacion','CasController@create_certificacion_detalle_publicacion' ); 
     Route::put('/cas/certificacion_cargo_update','CasController@certificacion_cargo_update');
     Route::get('/cas/airhsp','AirHspCasController@index_cas'); 
     Route::get('/cas/base_cas/{anio}','CasController@base_cas'); 
+    Route::get('/cas/base_cas_proyeccion/{anio}','CasController@base_cas_proyeccion'); 
+    Route::get('/cas/base_cas_historial/{base_cas_id}','CasController@base_cas_historial'); 
     Route::put('/cas/base_cas','CasController@cas_update'); 
     Route::get('/cas/certificados','CasController@certificados'); 
     Route::get('/cas/unidades_metas','AirHspCasController@unidades_metas'); 
     Route::post('/cas/convocatoria','CasController@nueva_convocatoria'); 
     Route::post('/cas/convocatorias','ConvocatoriaController@nueva_convocatoria'); 
-    Route::post('/cas/nueva_publicacion','CasController@nueva_publicacion'); 
+    
     Route::get('/cas/publicacion','CasController@lista_publicacion'); 
     Route::post('/cas/nueva_plaza','AirHspCasController@nueva_plaza'); 
     Route::put('/cas/base_cas_update','CasController@base_cas_update'); 
-    Route::put('/cas/certificacion_update_solicitud','CertificacionController@update_solicitud'); 
+    
 
     Route::get('/cas/siga_net_ingresos','CasController@siga_net_ingresos'); 
-    Route::post('/cas/certificacion_validar','CertificacionController@validar'); 
     Route::get('/cas/certificado/{anio}','CertificadoController@certificadoCas'); 
 
     Route::get('/cas/metas','CertificacionController@metas'); 
 
-    Route::get('/requerimientos','RequerimientosController@index'); 
+    Route::get('/requerimientos/{anio}','RequerimientosController@index'); 
 
 
     Route::post('/cas/convocatoria/nueva_convocatoria','ConvocatoriaController@nueva_convocatoria'); 
@@ -156,14 +181,18 @@ Route::group(['middleware' => 'jwt.verify'], function() {
     Route::post('/presupuestal/devengado/importar','DevengadoController@import'); 
     Route::get('/presupuestal/resumen','PresupuestoController@resumen'); 
     Route::get('/presupuestal/certificacion','PresupuestoController@certificacion'); 
+    Route::get('/presupuestal/certificacion/{anio}','PresupuestoController@certificacion_anio'); 
     Route::get('/presupuestal/ejecucion','PresupuestoController@ejecucion'); 
     Route::post('/presupuestal/variables','PresupuestoController@variables'); 
 
     Route::get('/presupuestal/presupuesto_cas/{anio}','PresupuestoController@presupuesto_cas'); 
+    Route::get('/presupuestal/presupuesto_cas2023','PresupuestoController@presupuesto_cas2023'); 
+    Route::get('/presupuestal/presupuesto_cas_ley','PresupuestoController@presupuesto_cas_ley'); 
 
     Route::get('/liquidacion/cas/{anio}','LiquidacionController@getLiquidacionCas'); 
     Route::get('/liquidacion/report/{anio}','LiquidacionController@getLiquidacionReport'); 
     Route::get('/liquidacion/report_siaf/{anio}','LiquidacionController@getLiquidacionReportSiaf'); 
+    Route::get('/liquidacion/report_siaf_all/{anio}','LiquidacionController@getLiquidacionReportSiafAll'); 
     Route::post('/liquidacion/resumen_liquidacion','LiquidacionController@getLiquidacionResumenLiquidacion'); 
     Route::post('/liquidacion/resumen_siaf','LiquidacionController@getLiquidacionResumenSiaf'); 
     Route::post('/liquidacion/update_liquidacion_detalle','LiquidacionController@updateLiquidacionDetelle'); 
@@ -207,13 +236,15 @@ Route::group(['middleware' => 'jwt.verify'], function() {
 });
 
 
+// LOGIN
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
 ], function ($router) {	
 	Route::post('register', 'AuthController@register');
     Route::post('me', 'AuthController@me');
-	Route::post('login', 'AuthController@login');	
+	
+    Route::post('login', 'AuthController@login');	
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('autenticated', 'AuthController@autenticated');

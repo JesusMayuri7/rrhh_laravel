@@ -22,7 +22,8 @@ class PlanillaFormativa extends Model {
     "fuente",
     "mes",
     "anio",
-    "descripcion"
+    "descripcion",
+    "descuento"
     ];
 
 }

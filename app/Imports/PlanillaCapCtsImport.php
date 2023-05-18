@@ -26,7 +26,7 @@ class PlanillaCapCtsImport implements ToCollection,WithHeadingRow
     public function collection(Collection $rows)
     {
         $descripcion ='CTS';          
-        $anio = '2021';
+        $anio = '2023';
         //$mes =  substr($rows[0]['cod_periodo'], 4, 6);
         $item = array_values($this->campos[0][0]);  
         $dataSet = [];   

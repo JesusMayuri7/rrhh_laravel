@@ -43,6 +43,8 @@ class DevengadoImport implements ToCollection,WithHeadingRow
                     "moneda"=> $row["moneda"],
                     "tipo_cambio"=> $row["tipo_cambio"],
                     "monto"=> $row["monto"],
+                    "secuencia"=> $row["secuencia"],
+                    "secuencia_padre"=> $row["secuencia_padre"],
                     "monto_nacional"=> $row["monto_nacional"],
                     "fecha_autorizacion"=> $row["fecha_autorizacion"],
                     "fecha_bd_oracle"  => $row["fecha_bd_oracle"]

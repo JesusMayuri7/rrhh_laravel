@@ -25,7 +25,9 @@ class BasePapDetalle extends Model {
         'detalle',  
         'org_unidad_id',
         'fe_salida',
-        'fin_licencia'
-
+        'fin_licencia',
+        'doc_ingreso',
+        'doc_salida',
+        'doc_licencia'
     ];
 }

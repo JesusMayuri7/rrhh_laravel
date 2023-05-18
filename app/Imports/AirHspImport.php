@@ -17,15 +17,15 @@ class AirHspImport implements ToCollection,WithHeadingRow
     * @param array $row    
     */
 
+    public function __construct()
+    {
+         //Documentos::where(['anio'=>$this->anio, 'control'=>'INTERNO'])->delete();              
+        AirHspDB::where(['anio'=>2023])->delete();              
+        AirHspCodigosDB::where(['anio'=>2023])->delete();              
+    }
+
     public function collection(Collection $rows)
     {
-        //return $rows;
-       // dd($rows->toArray());
-/*        $rows->toArray()->each(function ($row){
-            AirHspDB::create([
-                'codigo_ue' => $row->codigo_ue
-            ]);
-        });*/
 
          $data= $rows->toArray();   
 
@@ -80,8 +80,8 @@ class AirHspImport implements ToCollection,WithHeadingRow
                 "autogenerado" =>$row["autogenerado"],
                 "fecha_alta" =>$row["fecha_alta"],
                 "fecha_estado" =>$row["fecha_estado"],
-                "fecha_inicio_vigencia_cas" =>$row["fecha_inicio_vigencia_cas"],
-                "fecha_fin_vigencia_cas" =>$row["fecha_fin_vigencia_cas"],
+                "fecha_inicio_vigencia_reg" =>$row["fecha_inicio_vigencia_reg"],
+                "fecha_fin_vigencia_reg" =>$row["fecha_fin_vigencia_reg"],
                 //"secuencia_funcional" =>$row["secuencia_funcional"],
                 "codigo_categoria_presupuestal" =>$row["codigo_categoria_presupuestal"],
                 "desc_categoria_presupuestal" =>$row["desc_categoria_presupuestal"],
@@ -111,7 +111,7 @@ class AirHspImport implements ToCollection,WithHeadingRow
            $item = array_values($row);
            $totalRows = count($item);
           // dd($item);
-           $j=65;
+           $j=69;
            while($j <= $totalRows)  
             {
            //for($j=74;$j<=count($item);$j+=3)
@@ -125,18 +125,18 @@ class AirHspImport implements ToCollection,WithHeadingRow
                       // ShowMessage(RangoMatriz[i,11]);
                       $codigo = new AirHspCodigosDB;
                       $codigo->air_activos_pvn_id = $rowAdded->id;
-                       $codigo->dni = $item[14];
-                       $codigo->plaza = $item[10];
-                       $codigo->fuente = $item[65] == '00' ? '00':'09';
+                       $codigo->dni = $item[16];
+                       $codigo->plaza = $item[12];
+                       $codigo->fuente = $item[70] == '00' ? '00':'09';
 
-                       $codPvn = CodigosPvn::where('codigo_air', 'C'.$item[($j-1)])->firstOrFail();
+                       $codPvn = CodigosPvn::where('codigo_air', 'C'.$item[($j-1)])->where('anio','2023')->first();
                        //dd($codPvn);
-                      // if($codPvn)
+                       if($codPvn)
                        {
                        $codigo->idcodigo = $codPvn->idcodigo;
                        $codigo->codigo = 'C'.$item[($j-1)];  /// revisar aqui, no regresa 1,  revisar columna fuente no aparece en el array
                        $codigo->monto = $monto;                       
-                       $codigo->anio=2022;
+                       $codigo->anio=2023;
                        $codigo->codsiaf =$j;
                        //$codigo->codname = RangoMatriz[4,J];                       
                        //fdExtraerId.ParamByName('dni').AsString:=RangoMatriz[i,15];                                              
@@ -151,11 +151,14 @@ class AirHspImport implements ToCollection,WithHeadingRow
                        $codigo->save();
                        }
                     }  //if
-                } //vacio
-                if ($j==65)
+                } 
+                if($j==81)
+                break;
+                //vacio
+                if ($j==69)
                     $j= $j+3;
-                else
-                    $j= $j+2;
+                else $j= $j+2;
+         
             }  // for
         }  // foreach
     } //funcion

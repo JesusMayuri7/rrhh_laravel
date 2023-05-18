@@ -7,8 +7,7 @@ class BaseCasDB extends Model {
     //public $incrementing = false;
     protected $table = 'base_cas';  
     
-    protected $fillable = [
-       
+    protected $fillable = [       
         'detalle',
         'meta_id',  
         'cargo',
@@ -19,6 +18,11 @@ class BaseCasDB extends Model {
         'meta_id2',
         'org_area_id',
         'estado_opp',
+        'codigo_plaza',
+        'presupuesto',
+        'codigo_plaza_ant',
+        'sustento_legal'
+
      
                
     ];

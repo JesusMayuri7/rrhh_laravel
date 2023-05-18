@@ -98,22 +98,22 @@ class ConfiguracionController extends BaseController
        }
 
        public function areas() {
-        $data = db::select(db::raw("select org_area_id,desc_area from v_mop "));  // revisar mes ? estaba con 6    
+        $data = db::select(db::raw("select org_area_id as id,desc_area from v_mop "));  
         return response()->json([
             "status" => true,
             "message" => "Areas",
             "data" => $data,
-        ]);
+        ]); 
+       }
 
+       public function modalidades($anio) {
+        $data = db::select(db::raw("select id,dsc_modalidad from modalidad where anio= :anio"),['anio' => $anio]);  // revisar mes ? estaba con 6    
         return response()->json([
             "status" => true,
-            "organos" =>$organo,
-            "unidades" => $unidad,
-            "unidades2" => $unidad2,
-            "metas" => $metas,
-            "metas2" => $metas2
-        ]);  
-       }
+            "message" => "Modalidades",
+            "data" => $data,
+        ]);
+        }
 
     public function index($mes)
     {

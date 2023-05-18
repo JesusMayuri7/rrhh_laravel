@@ -14,6 +14,8 @@ class PlanillaCas extends Model {
     "monto",
     "aguinaldo",
     "reintegro",
+    "incremento",
+    "bono",
     "total_ingreso",
     "retencion_cuarta",
     "otros_si_afecto",

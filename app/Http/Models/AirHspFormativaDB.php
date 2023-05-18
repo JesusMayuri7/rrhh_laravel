@@ -81,6 +81,8 @@ class AirHspFormativaDB extends Model {
         "desc_distrito" ,
         "codigo_intervencion_estrategica" ,
         "desc_intervencion_estrategica" ,    
+        "fecha_inicio_vigencia_reg" ,    
+        "fecha_fin_vigencia_reg" ,    
         "honorarios",
         "fuente" ,    
         "essalud" ,

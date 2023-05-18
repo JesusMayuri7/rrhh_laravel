@@ -48,16 +48,19 @@ class CasController extends BaseController
     public function certificacion_create(Request $request) {    
        
         try {
+            $result=DB::transaction(function () use ($request) {
             $campos = $request->input("values");        
             $lines=[];
             foreach($campos as $a){
                 $lines[]= new SolicitudDetalle(
                     ["codigo_plaza" => $a["codigo_plaza"],
                      "cargo" => $a["cargo"],
-                     "dependencia" => $a["desc_unidad2"],
-                     "org_unidad_id" => $a["org_unidad_id2"],
+                     "dependencia" => $a["area"]["desc_area"],
+                     "area_id" => $a["area"]["id"],
                      "monto" => $a["honorario_mensual"],                     
-                     
+                     "anio"=>"2023",
+                     "modalidad_concurso" => $a["modalidad_conv"]["label"],                     
+                     "sustento_legal" => $a["sustento_conv"]["label"],                     
                     ]);
             }
             $soli = new Solicitud;
@@ -65,12 +68,19 @@ class CasController extends BaseController
             $soli->save();                      
             $detalle = new SolicitudDetalle($lines);                
             $soli->solicitudDetalle()->saveMany($lines);
+            return $soli;  
+        });
             return response()->json([
             "status" => true,
-            "data" =>$lines,        
-            ]);       
-        } catch (\Throwable $th) {
-            throw $th;
+            "data" =>$result,        
+            ]);   
+                
+        } catch (Exception $e) {
+            return response()->json([
+                "status" => true,
+                "message"=> $e,
+                "data" =>[],        
+            ],500);   
         }    
     }
 
@@ -112,6 +122,26 @@ class CasController extends BaseController
     ]); 
    }
 
+   public function base_cas_proyeccion($anio) {
+ 
+    $data =DB::select(DB::raw("SELECT * from v_base_cas_proyeccion where anio=?"),[$anio]); 
+    return response()->json([
+        "status" => true,
+        "data" =>$data,
+        "message" => 'Base Cas Proyeccion'
+    ]); 
+   }
+
+   public function base_cas_historial($base_cas_id) {
+ 
+    $data =DB::select(DB::raw("CALL sp_historial_cas(?)"),[$base_cas_id]);
+    return response()->json([
+        "status" => true,
+        "data" =>$data,
+        "message" => 'Base Cas Historial'
+    ]); 
+   }
+
    public function siga_net_ingresos() {
     $siganet = SigaNet::get();  
     return response()->json([
@@ -125,7 +155,7 @@ class CasController extends BaseController
     $result=DB::transaction(function () use ($request) {
         if ($request->input('codigo_plaza')) {   
             //$data = BaseCasDB::find($request->input('codigo_plaza'));  
-            $data = BaseCasDB::where('codigo_plaza', $request->input('codigo_plaza'))->firstOrFail();
+            $data = BaseCasDB::where(['codigo_plaza' => $request->input('codigo_plaza'),'anio'=>2022])->firstOrFail();
         }       
         $data->cargo = $request->input('cargo');
         $data->monto = $request->input('monto');                
@@ -145,7 +175,7 @@ class CasController extends BaseController
            ],201);   
        } catch(Exception $e) {
                return response()->json([
-                   "status" => true,
+                   "status" => false,
                    "data" =>$result,
                    "message"=>"error al actualizar cargo",
                    "log"=>"erro transaccion"
@@ -176,10 +206,21 @@ class CasController extends BaseController
                }   
                elseif ($request->input('values.estado_opp')!==null) {
                 $data->update(["estado_opp"=>$request->input('values.estado_opp')]);
-               }          
+               } 
+               elseif ($request->input('values.codigo_plaza')!==null) {
+                $data->update(["codigo_plaza"=>$request->input('values.codigo_plaza')]);
+               }  
+               elseif ($request->input('values.presupuesto')!==null) {
+                $data->update(["presupuesto"=>$request->input('values.presupuesto')]);
+               }  
+               elseif ($request->input('values.codigo_plaza_ant')!==null) {
+                $data->update(["codigo_plaza_ant"=>$request->input('values.codigo_plaza_ant')]);
+               }  
+               elseif ($request->input('values.sustento_legal')!==null) {
+                $data->update(["sustento_legal"=>$request->input('values.sustento_legal')]);
+               }      
                 else
                 {
-
                     $data->update($request->input('values'));
                     if($request->input('values.nombres')!==null) {
                        // se debe obtener primero base_cas_detalle_id
@@ -196,6 +237,11 @@ class CasController extends BaseController
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
                         $dataDetalle->update(['tipo_ingreso'=>$request->input('values.tipo_ingreso')]);  
                     }
+                    elseif($request->input('values.tipo_salida')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['tipo_salida'=>$request->input('values.tipo_salida')]);  
+                    }
                     elseif($request->input('values.fe_ingreso')!==null)
                     {
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
@@ -205,6 +251,21 @@ class CasController extends BaseController
                     {
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
                         $dataDetalle->update(['fin_licencia'=>$request->input('values.fin_licencia')]);  
+                    }
+                    elseif($request->input('values.doc_salida')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['doc_salida'=>$request->input('values.doc_salida')]);  
+                    }
+                    elseif($request->input('values.doc_ingreso')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['doc_ingreso'=>$request->input('values.doc_ingreso')]);  
+                    }
+                    elseif($request->input('values.doc_licencia')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['doc_licencia'=>$request->input('values.doc_licencia')]);  
                     }
                 }
         }

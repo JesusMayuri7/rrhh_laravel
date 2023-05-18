@@ -38,6 +38,7 @@ class DesignacionController extends BaseController
                 $data = new DesignacionDB;            
             }            
             $data->doc_designacion = $request->input('doc_designacion');            
+            $data->anio = $request->input('anio');            
             $data->doc_cese = $request->input('doc_cese');            
             $data->detalle = $request->input('detalle');
             $data->plaza = $request->input('plaza');
@@ -50,7 +51,7 @@ class DesignacionController extends BaseController
             $data->fin = ($request->input('fin')=='0000-00-00' || $request->input('fin')=='') ? null: $request->input('fin');
             $data->modalidad = $request->input('modalidad');
             $data->tipo = $request->input('tipo');
-            $data->org_area_id = $request->input('org_area_id');
+            $data->org_area_id = $request->input('area_id');
             $data->save();
             //DesignacionV::where(['id'=>$data->id])->orderBy('id', 'DESC')->get();
             return DesignacionV::where(['id'=>$data->id])->first();

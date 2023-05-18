@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Models\LiquidacionCas;
 use App\Http\Models\LiquidacionReport;
 use App\Http\Models\LiquidacionReportSiaf;
+use App\Http\Models\LiquidacionReportSiafAll;
 use App\Http\Models\LiquidacionDetalleDB;
 use App\Http\Models\LiquidacionDB;
 
@@ -39,6 +40,15 @@ class LiquidacionController extends BaseController
 
    public function getLiquidacionReportSiaf($anio) {
     $data =LiquidacionReportSiaf::where(['anio'=>$anio])->get();
+        return response()->json([
+            "status" => true,
+            "message" => 'Reporte de Liquidaciones',
+            "data" =>$data
+        ]);       
+   }
+
+   public function getLiquidacionReportSiafAll($anio) {
+    $data =LiquidacionReportSiafAll::where(['anio'=>$anio])->get();
         return response()->json([
             "status" => true,
             "message" => 'Reporte de Liquidaciones',
@@ -144,12 +154,12 @@ class LiquidacionController extends BaseController
                 $item->monto_certificado = $a["montoCertificado"];            
                 $item->save();
                 } 
-            $liquidacionCas = LiquidacionCas::where(['id'=>$data->id])->orderBy('id', 'DESC')->get();
+            $liquidacionCas = LiquidacionCas::where(['id'=>$data->id])->first();
             return $liquidacionCas;
             });
             return response()->json([
                 "status" => true,
-                "data" =>$request->input(),
+                "data" =>$result,
                 "message"=>"Registro con exito",
                 "log"=>"transaccion correcta"
                 ],201);   

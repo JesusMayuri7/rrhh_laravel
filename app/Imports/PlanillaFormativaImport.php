@@ -21,39 +21,41 @@ class PlanillaFormativaImport implements ToCollection
 
     public function collection(Collection $rows)
     {
-      $descripcion = $rows[0][3];  
+      $descripcion = $rows[0][4];  
       \App\Http\Models\PlanillaFormativa::where(['mes'=>$this->mes, 'descripcion'=>$descripcion])->delete();              
 
         foreach ($rows as $row)
         {          
             
-            if ($row[0] === 'PNMC' && $fuente == 0 ) {
+            if (substr($row[1],-4) == 'PNMC' && $fuente == 0 ) {
                 $fuente = 2; 
-                $meta = $row[1];
+                $meta = substr($row[1],0,4);
                 continue;
             }
-            if ($row[0] === 'RLOC' && $fuente == 0 ) {
+            if (substr($row[1],-4) == 'RLOC' && $fuente == 0 ) {
                 $fuente = 1;
-                $meta = $row[1];
+                $meta = substr($row[1],0,4);
                 continue;
             }
             if (is_numeric($row[0]) && (strlen($row[0])==5) )
             {
                 PlanillaFormativa::create([                                                              
                     "id_personal" => $row[0] ?? 0,                    
-                    "nombres" => $row[1] ?? "",                
-                    "dni" =>$row[2] ?? "00000000",
-                    "monto" => $row[3] ?? 0,
-                    "media" => $row[4] ?? 0,
-                    "reintegro" => $row[5] ?? 0,
-                    "total_ingreso" => $row[6] ?? 0,                    
-                    "sctr_pension" => $row[7] ?? 0,
-                    "sctr_salud" => $row[8] ?? 0,                    
-                    "total_aporte" => $row[9] ?? 0,                                        
+                    "codigo_plaza" => $row[1] ?? 0,                    
+                    "nombres" => $row[2] ?? "",                
+                    "dni" =>$row[3] ?? "00000000",
+                    "monto" => $row[4] ?? 0,
+                    "media" => $row[5] ?? 0,
+                    "reintegro" => $row[6] ?? 0,
+                    "descuento" => $row[7] ?? 0,
+                    "total_ingreso" => $row[8] ?? 0,                    
+                    "sctr_pension" => $row[9] ?? 0,
+                    "sctr_salud" => $row[10] ?? 0,                    
+                    "total_aporte" => $row[11] ?? 0,                                        
                     "meta" => $meta,
                     "fuente" => $fuente,
                     "mes" => $this->mes,
-                    "anio" => 2022,
+                    "anio" => 2023,
                     "descripcion" => $descripcion
                 ]);
             }

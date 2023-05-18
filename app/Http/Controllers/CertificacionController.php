@@ -22,8 +22,7 @@ use App\Http\Models\SolicitudDetalle;
 class CertificacionController extends BaseController
 {
    public function validar(Request $request) {
-    $data =DB::select(DB::raw("CALL sp_certificacion_cas_validar(?)"),[$request->input('codigo_plaza')]);    
-    $metas = Meta::get();  
+    $data =DB::select(DB::raw("CALL sp_certificacion_cas_validar(?)"),[$request->input('codigo_plaza')]);        
     return response()->json([
         "status" => true,
         "data" =>$data,        
@@ -190,7 +189,7 @@ class CertificacionController extends BaseController
                 $pivot=null;
                if ($request->input("id") && $request->input("publicacion_id") ) {
                     $pivot = SolicitudDetalle::find($request->input("id"));                      
-                    $pivot->publicacion()->sync([$request->input("publicacion_id") => ['estado' => $request->input("estado_final")?? 'PENDIENTE',
+                    $pivot->publicacion()->sync([$request->input("publicacion_id") => ['estado' => $request->input("estado_final.estado") ?? 'PENDIENTE',
                                                                                         'dni' => $request->input("dni") ?? null,
                                                                                         'nombres' =>$request->input("nombres") ?? null
                                                                                         ]]);
@@ -218,7 +217,7 @@ class CertificacionController extends BaseController
      $shop = CertificacionDB::find($request->input("certificacion_id")); 
      try {
         $shop->solicitud = $request->input("solicitud");
-        $shop->fecha_solicitud = $request->input("fecha_solicitud");
+        $shop->fecha_solicitud = Carbon::parse($request->input("fecha_solicitud"))->toDateString();
         $shop->save();
         return response()->json([
             "status" => true,
@@ -236,7 +235,6 @@ class CertificacionController extends BaseController
         $shop = SolicitudDetalle::find($request->input("id")); 
         try {
             $shop->respuesta = $request->input("values.respuesta");
-
             //$shop->publicacion_id = $request->input("values.publicacion_id");  
             if ($request->input("values.publicacion_id")) {                
                 $shop->publicacion()->sync([$request->input("values.publicacion_id")], false);
@@ -244,8 +242,7 @@ class CertificacionController extends BaseController
 
             if ($request->input("values.publicacion_id")) {                
                 $shop->publicacion()->sync([$request->input("values.publicacion_id")], false);
-            }
-            
+            }            
             if ($request->input("values.modalidad") !== null ) {
                 $shop->modalidad = $request->input("values.modalidad");                
             }
@@ -254,7 +251,7 @@ class CertificacionController extends BaseController
                 $shop->solicitud()->update(["solicitud"=>$request->input("values.solicitud")]);   
             }
             if ($request->input("values.fecha_solicitud") !== null ) {
-                $shop->solicitud()->update(["fecha_solicitud"=> Carbon::createFromFormat('d/m/Y',$request->input("values.fecha_solicitud"))]);
+                $shop->solicitud()->update(["fecha_solicitud"=> Carbon::parse($request->input("values.fecha_solicitud"))->format('Y-m-d')]);
                 //Carbon::createFromFormat('d/m/Y',$request->input("values.fecha_solicitud"))]);
             }
             if ($request->input("values.expediente") !== null) {
@@ -263,10 +260,15 @@ class CertificacionController extends BaseController
             if ($request->input("values.tipo") !== null) {
                 $shop->solicitud()->update(["tipo"=>$request->input("values.tipo")]);   
             }
-            if ($request->input("values.motivo") !== null) {
-                
-                $shop->solicitud()->update(["motivo" => $request->input("values.motivo")] );   
-            }                                        
+            if ($request->input("values.modalidad_concurso") !== null) {                
+                $shop->update(["modalidad_concurso" => $request->input("values.modalidad_concurso")] );   
+            }       
+            if ($request->input("values.sustento_legal") !== null) {                
+                $shop->update(["sustento_legal" => $request->input("values.sustento_legal")] );   
+            }  
+            if ($request->input("values.anulado") !== null) {                
+                $shop->update(["anulado" => $request->input("values.anulado")] );   
+            }                                   
             return response()->json([
             "status" => true,
             "data" =>$request->input(),        

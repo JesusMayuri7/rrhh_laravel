@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Http\Models\PlanillaCap;
 use App\Http\Models\PlanillaCapCodigos;
+use App\Http\Models\CodigosPvn;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -30,6 +31,7 @@ class PlanillaCapImport implements ToCollection,WithHeadingRow
         //$mes =  substr($rows[0]['cod_periodo'], 4, 6);
         $item = array_values($this->campos[0][0]);  
         $dataSet = [];   
+        //$codigosPvn = CodigosPvn::where(['anio' => $anio])->get();
 
       \App\Http\Models\PlanillaCap::where(['mes'=>$this->mes, 'descripcion'=>$descripcion])->delete();              
 
@@ -68,7 +70,7 @@ class PlanillaCapImport implements ToCollection,WithHeadingRow
                         if ($row[$item[$i]] > 0 ) {                   
                                 $objeto=[];
                             // $aja= array_add($aja, 'codigo',$item[$i]);   
-                            //if($item[$i] == ("c_01".str_pad($j,2,"0",STR_PAD_LEFT)) )        
+                            //if($item[$i] == ("c_01".str_pad($j,2,"0",STR_PAD_LEFT)) )                                      
                                 $objeto= array_add($objeto,'planilla_id', $persona->id);                                
                                 $objeto= array_add($objeto,'id_personal', $row['cod_trabajador']);                                
                                 $objeto= array_add($objeto, 'codigo',$item[$i]);      

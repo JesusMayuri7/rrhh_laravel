@@ -12,9 +12,19 @@ class TodoController extends Controller
        return \App\Http\Models\Todo::orderBy('fecha','DESC')->orderBy('nivel', 'ASC')->get();       
    }
 
+   public function index_anio($anio){
+    $data = \App\Http\Models\Todo::where('anio','=', $anio)->orderBy('fecha','DESC')->orderBy('nivel', 'ASC')->get();       
+
+    return response()->json([
+        "status" => true,
+        "data" =>$data,
+        "message" => 'Listado de Agenda',
+    ]);
+}
+
    public function save(Request $request){
 
-     $new = new  \App\Http\Models\Todo;
+     $new = \App\Http\Models\Todo::firstOrNew(['idtodo'=> $request->input('idtodo')]);
      $new->nivel = $request->input('nivel');
      $new->titulo = $request->input('titulo');
      $new->texto = $request->input('texto');
@@ -23,8 +33,9 @@ class TodoController extends Controller
      $new->save();
 
      return response()->json([
-        "label" => 1,
-        "data" =>$request->input()
+        "status" => true,
+        "data" =>$new,
+        "message" => 'Agenda actualizada',
     ]);
     }
 

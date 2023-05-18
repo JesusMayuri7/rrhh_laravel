@@ -9,6 +9,7 @@ class AirHspDB extends Model {
     protected $table = 'air_activos_pvn';  
 
     protected $fillable = [
+        "anio",
     "codigo_ue" ,
     "tipo_establecimiento" ,
     "desc_tipo_establecimiento" ,

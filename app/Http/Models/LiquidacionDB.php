@@ -20,7 +20,7 @@ class LiquidacionDB extends Model {
         'certificado_devengado_id',
         'fuente_devengado_id',
         'meta_devengado_id',
-        'proceso'
+        'proceso',        
     ];
 
 }

@@ -83,14 +83,20 @@ class CapController extends BaseController
                                 $dataDetalle->update(["detalle"=>$request->input('values.detalle')]);
                             if($request->input('values.fe_ingreso')!==null)
                                 $dataDetalle->update(["fe_ingreso"=>$request->input('values.fe_ingreso')]);
+                            if($request->input('values.doc_ingreso')!==null)
+                                $dataDetalle->update(["doc_ingreso"=>$request->input('values.doc_ingreso')]);
                             if($request->input('values.tipo_ingreso')!==null)
                                 $dataDetalle->update(["tipo_ingreso"=>$request->input('values.tipo_ingreso')]);
                             if($request->input('values.tipo_salida')!==null)
                                 $dataDetalle->update(["tipo_salida"=>$request->input('values.tipo_salida')]);
                             if($request->input('values.fe_salida')!==null)
                                 $dataDetalle->update(["fe_salida"=>$request->input('values.fe_salida')]);
+                            if($request->input('values.doc_salida')!==null)
+                                $dataDetalle->update(["doc_salida"=>$request->input('values.doc_salida')]);
                             if($request->input('values.fin_licencia')!==null)
                                 $dataDetalle->update(["fin_licencia"=>$request->input('values.fin_licencia')]);
+                            if($request->input('values.doc_licencia')!==null)
+                                $dataDetalle->update(["doc_licencia"=>$request->input('values.doc_licencia')]);
                             if($request->input('values.nombres')!==null)
                                 $dataDetalle->update(["nombres"=>$request->input('values.nombres')]);                            
                             //$dataDetalle->save();

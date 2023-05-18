@@ -13,6 +13,8 @@ use App\Http\Models\Meta;
 use App\Http\Models\Fuente;
 use App\Http\Models\PresupuestoTotal;
 use App\Http\Models\VCertificacionTotal;
+use App\Http\Models\VPresupuestoCas;
+use App\Http\Models\VPresupuestoCas2023;
 use App\Http\Models\Pea;
 use App\Exports\PresupuestoExport;
 use App\Imports\PresupuestoImport;
@@ -43,7 +45,7 @@ class PresupuestoController extends BaseController
 
     public function presupuesto_cas($anio)
     {
-        $data = db::select(db::raw("select * from v_presupuesto_cas where ano_eje=:anio"),['anio'=>$anio]);  // revisar mes ? estaba con 6    
+        $data = VPresupuestoCas::where(['ano_eje'=>$anio])->get();  // revisar mes ? estaba con 6    
         return response()->json([
             "status" => true,
             "message"  => "Presupuesto CAS",
@@ -51,14 +53,38 @@ class PresupuestoController extends BaseController
         ]);
     }
 
+ 
+    public function presupuesto_cas_ley()
+    {
+        $data = VPresupuestoCas2023::where(['ano_eje'=>'2023'])->get();    // revisar mes ? estaba con 6    
+        return response()->json([
+            "status" => true,
+            "message"  => "Presupuesto CAS Ley",
+            "data" => $data,
+        ]);
+    }
+
     public function presupuestoCap($anio)
     {
-        $data = db::select(db::raw("select * from v_presupuesto_cap where ano_eje=:anio"),['anio'=>$anio]);  // revisar mes ? estaba con 6    
+                $data = db::select(db::raw("select * from v_presupuesto_cap where ano_eje=:anio"),['anio'=>$anio]);  // revisar mes ? estaba con 6    
         return response()->json([
             "status" => true,
             "message"  => "Presupuesto CAP",
             "data" => $data,
         ]);
+        
+    }
+
+    public function presupuestoCap2023()
+    {
+            $data = db::select(db::raw("select * from v_presupuesto_cap_2023"));  // revisar mes ? estaba con 6    
+            return response()->json([
+                "status" => true,
+                "message"  => "Presupuesto CAP 2023",
+                "data" => $data,
+            ]);
+
+
     }
 
     public function getMetas($anio)
@@ -113,7 +139,17 @@ class PresupuestoController extends BaseController
 
     public function certificacion()
     {
-        $data = VCertificacionTotal::where(['ano_eje'=>2022])->get();  // revisar mes ? estaba con 6    
+        $data = VCertificacionTotal::where(['ano_eje'=>2023])->orderBy('certificado_id', 'desc')->get();  // revisar mes ? estaba con 6    
+        return response()->json([
+            "status" => true,
+            "message"  => "listado de certificados",
+            "data" => $data,
+        ]);
+    }
+
+    public function certificacion_anio($anio)
+    {
+        $data = VCertificacionTotal::where(['ano_eje'=>$anio])->get();  // revisar mes ? estaba con 6    
         return response()->json([
             "status" => true,
             "message"  => "listado de certificados",
@@ -161,9 +197,9 @@ class PresupuestoController extends BaseController
        }
 
        public function get_modalidad_concepto_clasificador() {
-        $modalidad = DB::select(DB::raw("SELECT id,dsc_modalidad FROM modalidad"));
-        $concepto = DB::select(DB::raw("SELECT id,dsc_concepto FROM concepto"));
-        $clasificador = DB::select(DB::raw("SELECT id,dsc_clasificador FROM clasificador WHERE anio=2022"));
+        $modalidad = DB::select(DB::raw("SELECT id,dsc_modalidad FROM modalidad where anio=2023"));
+        $concepto = DB::select(DB::raw("SELECT id,dsc_concepto FROM concepto where anio=2023"));
+        $clasificador = DB::select(DB::raw("SELECT id,dsc_clasificador FROM clasificador WHERE anio=2023"));
         return response()->json([
             "status" => true,
             "message"=> 'Modalidad y Conceptos',
@@ -212,8 +248,6 @@ class PresupuestoController extends BaseController
                 "data" => PresupuestoDB::count()
             ]);
         }
-
-
 
         //(new OrdenImport)->import('ordenes.XLS', 'local', \Maatwebsite\Excel\Excel::XLSX);       
         // return redirect('/')->with('success', 'All good!');

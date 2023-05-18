@@ -46,7 +46,7 @@ class FormativaController extends BaseController
            ],200);   
        } catch(Exception $e) {
                return response()->json([
-                   "status" =>0,
+                   "status" =>false,
                    "data" =>$result,
                    "message"=>"error al remover registro",
                    "log"=>"erro transaccion"

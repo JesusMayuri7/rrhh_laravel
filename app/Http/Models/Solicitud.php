@@ -14,6 +14,7 @@ class Solicitud extends Model {
         'respuesta',
         'tipo',
         'motivo',
+        'fecha_solicitud'
     ];
   
     public function solicitudDetalle(){           

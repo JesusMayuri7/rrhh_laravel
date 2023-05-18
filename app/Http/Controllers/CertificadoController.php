@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\DB;
  use App\Http\Models\Certificado;
- use App\Http\Models\certificadoCas;
+ use App\Http\Models\VCertificadoCas;
+ use App\Http\Models\VCertificadoPracticante;
  use App\Http\Models\certificadoCap;
  use App\Http\Models\CertiClasiModaConcepto;
 
@@ -40,7 +41,7 @@ class CertificadoController extends BaseController
         $status=false;
         try
         {
-            $data = CertificadoCas::where("ano_eje",$anio)->get();            
+            $data = VCertificadoCas::where("ano_eje",$anio)->get();            
             $status = true;              
         }
         catch (Exception $e){
@@ -50,6 +51,25 @@ class CertificadoController extends BaseController
         return response()->json([
             "status" => $status,
             "message" => 'Certificado CAS',
+            "data" =>$data
+        ]);
+    }
+
+    public function certificadoPracticante($anio) {        
+        $data=null;
+        $status=false;
+        try
+        {
+            $data = VCertificadoPracticante::where("ano_eje",$anio)->get();            
+            $status = true;              
+        }
+        catch (Exception $e){
+            $status=false;
+        }
+        
+        return response()->json([
+            "status" => $status,
+            "message" => 'Certificado PRAC',
             "data" =>$data
         ]);
     }

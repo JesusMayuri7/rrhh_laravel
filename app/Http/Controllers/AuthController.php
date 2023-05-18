@@ -29,10 +29,11 @@ class AuthController extends Controller
 
         if (!$token = auth()->attempt($credentials)) {            
                 return response()->json([
-                    'status' => 0,
+                    'status' => true,
                     'token' => null,                    
                     'message' => 'Verifique su usuario o contraseña',
-                    'expires_in' => 0
+                    'expires_in' => 0,
+                    'data' => []
                 ], 401);
         }
 
@@ -130,7 +131,7 @@ class AuthController extends Controller
                 ],200);                         
         } catch (JWTException $e) {            
             return response()->json([
-                'status' => 0,
+                'status' => true,
                 'token' =>null,
                 'data' => [],
                 'message' => 'Acceso No autorizado',

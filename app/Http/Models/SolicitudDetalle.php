@@ -14,7 +14,12 @@ class SolicitudDetalle extends Model {
         'codigo_plaza',
         'meses',
         'monto',
-        'modalidad'     
+        'modalidad' ,
+        'area_id',
+        'anio',
+        'modalidad_concurso',
+        'sustento_legal',
+        'anulado'
     ];
   
     public function solicitud(){           

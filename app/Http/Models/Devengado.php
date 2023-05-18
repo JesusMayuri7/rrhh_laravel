@@ -26,6 +26,7 @@ class Devengado extends Model {
         "monto",
         "monto_nacional",
         "fecha_autorizacion",
-        "fecha_bd_oracle"        
+        "fecha_bd_oracle"   ,
+        "secuencia"     
     ];
 }

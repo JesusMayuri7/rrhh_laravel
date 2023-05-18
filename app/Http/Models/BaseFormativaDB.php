@@ -23,7 +23,7 @@ class BaseFormativaDB extends Model {
         'nro_tramite',
         'dependencia',
         'tipo2',
-        'org_unidad_id2',
+        'org_area_id',
         'estado_opp' ,
         'estado_pap'  ,
         'fecha_alta',
