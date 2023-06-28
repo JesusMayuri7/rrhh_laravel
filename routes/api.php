@@ -39,6 +39,12 @@ Route::post('/judiciales_detail','JudicialesController@create_detail');
 
 
 Route::group(['middleware' => 'jwt.verify'], function() {
+
+    
+    Route::get('/airhsp/codigos_air','CodigoAirhspController@index'); 
+    
+
+
     Route::post('/cas/planilla/importar','PlanillaCasController@import'); 
     
     // SUBSIDIO DEVOLUCIONES
@@ -62,6 +68,7 @@ Route::group(['middleware' => 'jwt.verify'], function() {
     Route::get('/configuracion/mop','ConfiguracionController@mop'); 
     Route::get('/configuracion/modalidades/{anio}','ConfiguracionController@modalidades');  
     Route::get('/configuracion/get_areas','ConfiguracionController@areas');
+    Route::get('/configuracion/get_tipo_requerimientos','ConfiguracionController@tipo_requerimientos');
 
     Route::get('/presupuestal/dependencias','PresupuestoController@dependencias'); 
 

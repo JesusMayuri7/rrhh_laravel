@@ -13,10 +13,12 @@ class BaseCasDetalle extends Model {
         "cargo",
         "tipo_ingreso",
         "fe_ingreso",
+        "fe_salida",
         "fin_licencia",
         "tipo_salida",
         "doc_salida",
         "doc_ingreso",
-        "doc_licencia"
+        "doc_licencia",
+        "teletrabajo"
     ];
 }

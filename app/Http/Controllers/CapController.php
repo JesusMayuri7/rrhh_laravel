@@ -72,6 +72,7 @@ class CapController extends BaseController
                     elseif ($request->input('values.monto_judicial')!==null) {
                         $data->update(["monto_judicial"=>$request->input('values.monto_judicial')]);
                     }
+                    
                     else 
                     {
                         //$data->update($request->input('values'));

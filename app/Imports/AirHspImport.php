@@ -109,10 +109,10 @@ class AirHspImport implements ToCollection,WithHeadingRow
             
            //dd($row);
            $item = array_values($row);
-           $totalRows = count($item);
+           $totalColumns = count($item);
           // dd($item);
            $j=69;
-           while($j <= $totalRows)  
+           while($j <= $totalColumns)  
             {
            //for($j=74;$j<=count($item);$j+=3)
            //{
@@ -127,8 +127,7 @@ class AirHspImport implements ToCollection,WithHeadingRow
                       $codigo->air_activos_pvn_id = $rowAdded->id;
                        $codigo->dni = $item[16];
                        $codigo->plaza = $item[12];
-                       $codigo->fuente = $item[70] == '00' ? '00':'09';
-
+                       $codigo->fuente = $item[70] == '00' ? '00': $codigo->fuente = $item[73] ;
                        $codPvn = CodigosPvn::where('codigo_air', 'C'.$item[($j-1)])->where('anio','2023')->first();
                        //dd($codPvn);
                        if($codPvn)
@@ -152,7 +151,7 @@ class AirHspImport implements ToCollection,WithHeadingRow
                        }
                     }  //if
                 } 
-                if($j==81)
+                if($j==102)
                 break;
                 //vacio
                 if ($j==69)

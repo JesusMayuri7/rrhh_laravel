@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 class DesignacionController extends BaseController
 {
    public function index($anio) {
-    $data = DesignacionV::where(["anio"=>$anio])->orderBy('id', 'DESC')->get();
+    $data = DesignacionV::where(["anio"=>$anio])->get();
         return response()->json([
             "status" => true,
             "data" =>$data,
@@ -41,7 +41,9 @@ class DesignacionController extends BaseController
             $data->anio = $request->input('anio');            
             $data->doc_cese = $request->input('doc_cese');            
             $data->detalle = $request->input('detalle');
+            $data->nro_cap = $request->input('nro_cap');
             $data->plaza = $request->input('plaza');
+            $data->plaza_origen = $request->input('plaza_origen');
             $data->dni = $request->input('dni');
             $data->trabajador_id = $request->input('trabajador_id');
             $data->nombres = $request->input('nombres');            
@@ -58,7 +60,7 @@ class DesignacionController extends BaseController
             });
             return response()->json([
                 "status" => true,
-                "data" =>$result,
+                "data" =>$request->input(),
                 "message"=>"Registro con exito",
                 "log"=>"transaccion correcta"
                 ],201);   

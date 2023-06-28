@@ -57,6 +57,7 @@ class CasController extends BaseController
                      "cargo" => $a["cargo"],
                      "dependencia" => $a["area"]["desc_area"],
                      "area_id" => $a["area"]["id"],
+                     "meta_id" => $a["meta"]["idmeta_anual"],
                      "monto" => $a["honorario_mensual"],                     
                      "anio"=>"2023",
                      "modalidad_concurso" => $a["modalidad_conv"]["label"],                     
@@ -247,6 +248,11 @@ class CasController extends BaseController
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
                         $dataDetalle->update(['fe_ingreso'=>$request->input('values.fe_ingreso')]);  
                     }
+                    elseif($request->input('values.fe_salida')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['fe_salida'=>$request->input('values.fe_salida')]);  
+                    }
                     elseif($request->input('values.fin_licencia')!==null)
                     {
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
@@ -266,6 +272,11 @@ class CasController extends BaseController
                     {
                         $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
                         $dataDetalle->update(['doc_licencia'=>$request->input('values.doc_licencia')]);  
+                    }
+                    elseif($request->input('values.teletrabajo')!==null)
+                    {
+                        $dataDetalle = BaseCasDetalle::where('id', $request->input('id.base_cas_detalle_id'))->firstOrFail();             
+                        $dataDetalle->update(['teletrabajo'=>$request->input('values.teletrabajo')]);  
                     }
                 }
         }

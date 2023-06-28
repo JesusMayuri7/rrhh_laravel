@@ -62,6 +62,16 @@ class ConfiguracionController extends BaseController
         ]);
     }
 
+    public function tipo_requerimientos()
+    {
+        $data = db::select(db::raw("select * from tipo_requerimiento"));  // revisar mes ? estaba con 6    
+        return response()->json([
+            "data" => $data,
+            "status" => true,
+            "message" => "Listado de Tipo de Requerimientos"
+        ]);
+    }
+
     public function ejecucion()
     {
         $data = DB::select(DB::raw("SELECT * FROM v_ejecucion_total"));  // revisar mes ? estaba con 6    

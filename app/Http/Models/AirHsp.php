@@ -21,6 +21,8 @@ class AirHsp extends Model {
         'BoniNavidad' =>'float',    
         'BoniExtJulio' =>'float',    
         'BoniExtDic' =>'float',    
+        'CtsMayo' =>'float',    
+        'CtsNov' =>'float',    
         'total' =>'float',    
 
 

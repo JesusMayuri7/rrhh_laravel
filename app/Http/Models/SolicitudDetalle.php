@@ -19,7 +19,8 @@ class SolicitudDetalle extends Model {
         'anio',
         'modalidad_concurso',
         'sustento_legal',
-        'anulado'
+        'anulado',
+        'meta_id'
     ];
   
     public function solicitud(){           
