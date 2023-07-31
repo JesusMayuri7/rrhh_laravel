@@ -48,9 +48,9 @@ class PlanillaCasImport implements ToCollection
                     "id_personal" => $row[0] ?? 0,                    
                     
                     "nombres" => $row[1] ?? "",                
-                    "monto" => $row[6] ?? 0,
-                    //"incremento"=>$row[2] ?? 0,
-                    //"aguinaldo" => $row[3] ?? 0,
+                    "monto" => $row[4] ?? 0,
+                    "incremento"=>$row[2] ?? 0,
+                    "aguinaldo" => $row[3] ?? 0,
                     //"bono" => $row[3] ?? 0,
                     "reintegro" => $row[5] ?? 0,
                     "total_ingreso" => $row[6] ?? 0,
